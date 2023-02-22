@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // Mongo DB conncetion
-const database = process.env.MONGO_URI;
+const database = process.env.MONGOSAL_URI;
 mongoose.set('strictQuery', false);
 mongoose.connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log('MONGO CONNECTION OPEN!!'))
