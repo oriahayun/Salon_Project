@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salon Management System | Login</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+
+</head>
+
+<body>
+    <header id="nav-wrapper">
+        <nav id="nav">
+            <div class="nav left">
+                <span class="gradient skew">
+                    <h1 class="logo un-skew">
+                        <a href="/">
+                            BeautySN
+                        </a>
+                    </h1>
+                </span>
+                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+                <a href="/" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+                <a href="/news" class="nav-link"><span class="nav-link-span"><span class="u-nav">News</span></span></a>
+                <a href="/login" class="nav-link active"><span class="nav-link-span"><span
+                            class="u-nav">Login</span></span></a>
+                <a href="/register" class="nav-link"><span class="nav-link-span"><span
+                            class="u-nav">Register</span></span></a>
+            </div>
+        </nav>
+    </header>
+    <main class="main-container">
+        <div class="page py-5">
+            <div class="page-single">
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-auth mx-auto">
+                            <div class="py-3">
+                                <img src="logo.png"
+                                    style="margin-left: auto; margin-right: auto; width: 80px; display: flex;" />
+                            </div>
+                            <form class="card needs-validation" id="loginForm" method="POST" novalidate>
+                                <div class="card-body p-6">
+                                    <div class="card-title text-center">Login to account</div>
+                                    <% if (status=="success" ) { %>
+                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                            <strong>
+                                                <%= message %>
+                                            </strong>
+                                        </div>
+                                        <% } else if (status=="error" ) { %>
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                <strong>
+                                                    <%= message %>
+                                                </strong>
+                                            </div>
+                                            <% } %>
+                                                <div class="form-group">
+                                                    <label class="form-label">Email address</label>
+                                                    <input type="email" class="form-control" id="email"
+                                                        placeholder="Enter email" name="email" required />
+                                                    <div class="invalid-feedback">
+                                                        Valid Email is required.
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">
+                                                        Password
+                                                    </label>
+                                                    <input type="password" class="form-control" id="password"
+                                                        placeholder="Password" name="password" required />
+                                                    <div class="invalid-feedback">
+                                                        Password is required.
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input">
+                                                        <span class="custom-control-label">Remember me</span>
+                                                    </label>
+                                                </div>
+                                                <div class="form-footer">
+                                                    <button type="button" id="btn_login"
+                                                        class="btn btn-primary btn-block">Login</button>
+                                                </div>
+                                                <div class="text-center text-muted py-3">
+                                                    Don't have account yet? <a href="/register">Register</a>
+                                                </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% if (status === 'logout') { %>
+            <input type="hidden" id="logout" value="<%= status %>">
+        <% } %>
+    </main>
+    <!-- partial -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src='/js/validation.js'></script>
+    <script>
+        const logoutField = document.getElementById('logout')
+        if (logoutField) {
+            document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+            window.location.href = '/login';
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userInfor');
+        }
+        var loginBtn = document.getElementById("btn_login");
+        $("#btn_login").on("click", function (e) {
+            var form = document.getElementById("loginForm");
+            if (form[0].checkValidity() === false) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add("was-validated");
+                return;
+            }
+            let data = {
+                email: $("#email").val(),
+                password: $("#password").val(),
+            }
+            $.ajax({
+                type: 'post',
+                url: '/login',
+                data: data,
+                success: function (result) {
+                    console.log(result)
+                    if (result.status == "success") {
+                        localStorage.setItem('userToken', result.userToken);
+                        localStorage.setItem('userInfor', JSON.stringify(result.user));
+                        document.cookie = `token=${result.userToken}`;
+                        if (result.user.role == "client") {
+                            location.href = "/dashboard";
+                        }
+                    }
+
+                }
+            });
+
+        })
+    </script>
+</body>
+
+</html>

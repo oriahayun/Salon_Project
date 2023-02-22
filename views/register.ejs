@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salon Management System | Register</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+
+</head>
+
+<body>
+    <header id="nav-wrapper">
+        <nav id="nav">
+            <div class="nav left">
+                <span class="gradient skew">
+                    <h1 class="logo un-skew"><a href="/">
+                            BeautySN
+                        </a></h1>
+                </span>
+                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+                <a href="/" class="nav-link"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
+                <a href="/news" class="nav-link"><span class="nav-link-span"><span class="u-nav">News</span></span></a>
+                <a href="/login" class="nav-link"><span class="nav-link-span"><span
+                            class="u-nav">Login</span></span></a>
+                <a href="/register" class="nav-link active"><span class="nav-link-span"><span
+                            class="u-nav">Register</span></span></a>
+            </div>
+        </nav>
+    </header>
+    <main class="main-container">
+        <div class="page py-5">
+            <div class="page-single">
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-auth mx-auto">
+                            <div class="py-3">
+                                <img src="logo.png"
+                                    style="margin-left: auto; margin-right: auto; width: 80px; display: flex;" />
+                            </div>
+                            <form class="card needs-validation" action="/register" method="POST" novalidate>
+                                <div class="card-body p-6">
+                                    <div class="card-title text-center">Register</div>
+                                    <% if (status == "success") { %>
+                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                            <strong><%= message %></strong>
+                                        </div>
+                                    <% } else if (status == "error") { %>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong><%= message %></strong>
+                                        </div>
+                                    <% } %>
+                                    <div class="form-group">
+                                        <label class="form-label">Firstname</label>
+                                        <input type="text" class="form-control" name="firstname" placeholder="Firstname"
+                                            required />
+                                        <div class="invalid-feedback">
+                                            Firstname is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Lastname</label>
+                                        <input type="text" class="form-control" name="lastname" placeholder="Lastname"
+                                            required />
+                                        <div class="invalid-feedback">
+                                            Lastname is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Email address</label>
+                                        <input type="email" class="form-control" name="email" placeholder="Enter email"
+                                            required />
+                                        <div class="invalid-feedback">
+                                            Valid Email is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            Password
+                                        </label>
+                                        <input type="password" class="form-control" name="password" placeholder="Password"
+                                            required />
+                                        <div class="invalid-feedback">
+                                            Password is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control places-autocomplete" name="location" id="format_address" required />
+                                        <input type="hidden" id="latitude" name="latitude" >
+                                        <input type="hidden" id="longitude" name="longitude">
+                                        <div class="invalid-feedback">
+                                            Location is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            Gender
+                                        </label>
+                                        <select class="form-control" name="gender" required>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Gender is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            Role
+                                        </label>
+                                        <select class="form-control" name="role" required>
+                                            <option value="client">Client</option>
+                                            <option value="salonowner">Salon Owner</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Role is required.
+                                        </div>
+                                    </div>
+                                    <div class="form-footer py-3">
+                                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                                    </div>
+                                    <div class="text-center text-muted py-3">
+                                        Don't have account yet? <a href="/login">Login</a>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- partial -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src='/js/validation.js'></script>
+    <script src="/js/autocomplete.js"></script>
+</body>
+
+</html>

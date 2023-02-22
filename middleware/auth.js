@@ -4,7 +4,7 @@ const auth = async (req, res, next) => {
     const token = req.cookies.token
 
     if (!token) {
-        return res.status(403).send("A token is required for authentication");
+        return res.redirect("/login")
     }
 
     try {

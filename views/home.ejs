@@ -3,16 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Salon</title>
+    <title>Salon Management System</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
         integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
-
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="/css/navbar.css">
 
@@ -24,7 +23,7 @@
             <div class="nav left">
                 <span class="gradient skew">
                     <h1 class="logo un-skew"><a href="/">
-                            SALON
+                            BeautySN
                         </a></h1>
                 </span>
                 <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
@@ -35,12 +34,12 @@
                 <a href="/news" class="nav-link"><span class="nav-link-span"><span class="u-nav">News</span></span></a>
                 <a href="/login" class="nav-link"><span class="nav-link-span"><span
                             class="u-nav">Login</span></span></a>
-                <a href="/signup" class="nav-link"><span class="nav-link-span"><span
-                            class="u-nav">Signup</span></span></a>
+                <a href="/register" class="nav-link"><span class="nav-link-span"><span
+                            class="u-nav">Register</span></span></a>
             </div>
         </nav>
     </header>
-    <main>
+    <main class="main-container">
         <div class="video_section" style="margin-top: 50px;">
             <video autoplay muted loop id="myVideo">
                 <source src="/sample.mp4" type="video/mp4">
@@ -50,11 +49,7 @@
         <div class="section" style="display: flex; align-items: center; flex-direction: column;">
             <canvas id="mycanvas" width="370" height="50"></canvas>
             <p class="description" style="text-align: center;">
-                HMS is a web-based, fully integrated hospital management system (HMS) for mid- to large-sized hospitals
-                and
-                clinics. HMS hospital software enables seamless end-to-end information flow, empowering hospitals with
-                critical insights needed to make effective decisions regarding patient care, administration, financial
-                accounting and more.
+                BeautySN is a web-based, fully integrated salon management system (BeautySN). BeautySN software enables seamless end-to-end information flow, empowering Admin with critical insights needed to make effective decisions regarding customer care, administration, financial accounting and more.
             </p>
         </div>
         <div class="section" style="margin-bottom: 30px;">
@@ -113,10 +108,7 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <h6>About</h6>
-                    <p class="text-justify">HMS is a web-based, fully integrated hospital management system (HMS) for mid- to large-sized hospitals and
-                      clinics. HMS hospital software enables seamless end-to-end information flow, empowering hospitals with
-                      critical insights needed to make effective decisions regarding patient care, administration, financial
-                      accounting and more.
+                    <p class="text-justify">BeautySN is a web-based, fully integrated salon management system (BeautySN). BeautySN software enables seamless end-to-end information flow, empowering Admin with critical insights needed to make effective decisions regarding customer care, administration, financial accounting and more.
                     </p>
                   </div>
                 <div class="col-xs-6 col-md-3">
@@ -167,10 +159,8 @@
         </div>
     </footer>
     <!-- partial -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/navbar.js"></script>
     <script src="js/logo.js"></script>
     <script>

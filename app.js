@@ -1,5 +1,4 @@
 var express = require('express');
-var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -12,9 +11,6 @@ dotenv.config();
 
 // Connect Database
 connectDB();
-
-var indexRouter = require('./routes/home');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -29,25 +25,11 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// set a cookie
-app.use(function (req, res, next) {
-    // check if client sent cookie
-    var cookie = req.cookies.cookieName;
-    if (cookie === undefined) {
-        // no: set a new cookie
-        var randomNumber = Math.random().toString();
-        randomNumber = randomNumber.substring(2, randomNumber.length);
-        res.cookie('cookieName', randomNumber, { maxAge: 900000, httpOnly: true });
-        //console.log('cookie created successfully');
-    } else {
-        // yes, cookie was already present 
-        //console.log('cookie exists', cookie);
-    }
-    next(); // <-- important!
-});
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+app.use('/', require('./routes/home'));
+app.use('/login', require('./routes/auth/login'));
+app.use('/register', require('./routes/auth/register'));
+app.use('/logout', require('./routes/auth/logout'));
+app.use('/dashboard', require('./routes/dashboard'));
+app.use('/news', require('./routes/news'));
 
 module.exports = app;
