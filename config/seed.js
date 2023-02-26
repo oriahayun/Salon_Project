@@ -20,6 +20,10 @@ const seedDB = async () => {
             firstname: "admin",
             lastname: "admin",
             email: "admin@admin.com",
+            gender: "male",
+            loaction: "",
+            latitude: 0,
+            longitude: 0,
             role: "admin",
             password: password
         }

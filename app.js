@@ -30,6 +30,7 @@ app.use('/login', require('./routes/auth/login'));
 app.use('/register', require('./routes/auth/register'));
 app.use('/logout', require('./routes/auth/logout'));
 app.use('/dashboard', require('./routes/dashboard'));
+app.use('/salon', require('./routes/salon'));
 app.use('/news', require('./routes/news'));
 
 module.exports = app;

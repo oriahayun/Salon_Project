@@ -2,170 +2,176 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Salon</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta charset="UTF-8">
+  <title>Salon | Dashboard</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
-        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+    integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/navbar.css">
 </head>
 
 <body>
-    <header id="nav-wrapper">
-        <nav id="nav">
-            <div class="nav left">
-                <span class="gradient skew">
-                    <h1 class="logo un-skew">
-                        <a href="/dashboard">
-                            BeautySN
-                        </a>
-                    </h1>
-                </span>
-                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
-            </div>
-            <div class="nav right">
-                <a href="/dashboard" class="nav-link active">
-                    <span class="nav-link-span">
-                        <span class="u-nav">Home</span>
-                    </span>
-                </a>
-                <a href="/appointment" class="nav-link">
-                    <span class="nav-link-span">
-                        <span class="u-nav">Appointment</span>
-                    </span>
-                </a>
-                <a href="/logout" class="nav-link">
-                    <span class="nav-link-span">
-                        <span class="u-nav">Logout</span>
-                    </span>
-                </a>
-            </div>
-        </nav>
-    </header>
-    <main class="main-container">
-        <input id="searchInput" class="input-controls" type="text" placeholder="Enter a location">
-        <div class="map" id="map" style="width: 100%; height: 92vh;"></div>
-    </main>
+  <header id="nav-wrapper">
+    <nav id="nav">
+      <div class="nav left">
+        <span class="gradient skew">
+          <h1 class="logo un-skew">
+            <a href="/dashboard">
+              BeautySN
+            </a>
+          </h1>
+        </span>
+        <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+      </div>
+      <div class="nav right">
+        <a href="/dashboard" class="nav-link active">
+          <span class="nav-link-span">
+            <span class="u-nav">Home</span>
+          </span>
+        </a>
+        <a href="/salon" class="nav-link">
+          <span class="nav-link-span">
+            <span class="u-nav">Salons</span>
+          </span>
+        </a>
+        <a href="/appointment" class="nav-link">
+          <span class="nav-link-span">
+            <span class="u-nav">Appointment</span>
+          </span>
+        </a>
+        <a href="/logout" class="nav-link">
+          <span class="nav-link-span">
+            <span class="u-nav">Logout</span>
+          </span>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <main class="main-container">
+    <input id="searchInput" class="input-controls" type="text" placeholder="Enter a location">
+    <div class="map" id="map" style="width: 100%; height: 92vh;"></div>
+  </main>
 
-    <!-- partial -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/navbar.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
-    <script>
-        var salon_positions = '<%- JSON.stringify(positions) %>';
-        const salon_position_data = JSON.parse(salon_positions)
-        const positions = [];
-        salon_position_data.map((data) => {
-            positions.push({
-                lat: parseFloat(data.latitude), lng: parseFloat(data.longitude)
-            })
+  <!-- partial -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/navbar.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
+  <script>
+    var salon_positions = '<%- JSON.stringify(positions) %>';
+    const salon_position_data = JSON.parse(salon_positions)
+    const positions = [];
+    salon_position_data.map((data) => {
+      positions.push({
+        lat: parseFloat(data.latitude), lng: parseFloat(data.longitude)
+      })
+    })
+    function getCoordinates() {
+      return new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+    }
+
+    async function initialize() {
+      const position = await this.getCoordinates();
+      let curlatitude = position.coords.latitude;
+      let curlongitude = position.coords.longitude;
+
+      var latlng = new google.maps.LatLng(curlatitude, curlongitude);
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: latlng,
+        zoom: 12
+      });
+
+      const markers = positions.map(position => {
+        const marker = new google.maps.Marker({
+          position,
+          map,
+          draggable: true,
+          animation: google.maps.Animation.DROP,
+        });
+        marker.setMap(map)
+
+        return marker
+      })
+      var marker = new google.maps.Marker({
+        map: map,
+        position: latlng,
+        draggable: true,
+        animation: google.maps.Animation.DROP,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+      });
+      //marker.setMap(map)
+      var input = document.getElementById('searchInput');
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      var geocoder = new google.maps.Geocoder();
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo('bounds', map);
+      var infowindow = new google.maps.InfoWindow();
+      autocomplete.addListener('place_changed', function () {
+        infowindow.close();
+        marker.setVisible(false);
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          window.alert("Autocomplete's returned place contains no geometry");
+          return;
+        }
+
+        // If the place has a geometry, then present it on a map.
+        if (place.geometry.viewport) {
+          map.fitBounds(place.geometry.viewport);
+        } else {
+          map.setCenter(place.geometry.location);
+          map.setZoom(17);
+        }
+
+        marker.setPosition(place.geometry.location);
+        marker.setVisible(true);
+
+        bindDataToForm(place.formatted_address, place.geometry.location.lat(), place.geometry.location.lng());
+        infowindow.setContent(place.formatted_address);
+        infowindow.open(map, marker);
+
+      });
+      // this function will work on marker move event into map 
+      markers.forEach((marker, index) => {
+        google.maps.event.addListener(marker, 'dragend', function () {
+          geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (results[0]) {
+                bindDataToForm(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
+                infowindow.setContent(results[0].formatted_address);
+                infowindow.open(map, marker);
+              }
+            }
+          });
+        });
+        google.maps.event.addListener(marker, "click", function () {
+          geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (results[0]) {
+                bindDataToForm(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
+                infowindow.setContent(results[0].formatted_address);
+                infowindow.open(map, marker);
+              }
+            }
+          });
+
         })
-        function getCoordinates() {
-          return new Promise(function (resolve, reject) {
-            navigator.geolocation.getCurrentPosition(resolve, reject);
-          });
-        }
-    
-        async function initialize() {
-          const position = await this.getCoordinates();
-          let curlatitude = position.coords.latitude;
-          let curlongitude = position.coords.longitude;
-    
-          var latlng = new google.maps.LatLng(curlatitude, curlongitude);
-          var map = new google.maps.Map(document.getElementById('map'), {
-            center: latlng,
-            zoom: 12
-          });
+      })
 
-          const markers = positions.map(position => {
-            const marker = new google.maps.Marker({
-              position,
-              map,
-              draggable: true,
-              animation: google.maps.Animation.DROP,
-            });
-            marker.setMap(map)
-    
-            return marker
-          })
-          var marker = new google.maps.Marker({
-            map: map,
-            position: latlng,
-            draggable: true,
-            animation: google.maps.Animation.DROP,
-            icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-          });
-          //marker.setMap(map)
-          var input = document.getElementById('searchInput');
-          map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-          var geocoder = new google.maps.Geocoder();
-          var autocomplete = new google.maps.places.Autocomplete(input);
-          autocomplete.bindTo('bounds', map);
-          var infowindow = new google.maps.InfoWindow();
-          autocomplete.addListener('place_changed', function () {
-            infowindow.close();
-            marker.setVisible(false);
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-              window.alert("Autocomplete's returned place contains no geometry");
-              return;
-            }
-    
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-              map.fitBounds(place.geometry.viewport);
-            } else {
-              map.setCenter(place.geometry.location);
-              map.setZoom(17);
-            }
-    
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-    
-            bindDataToForm(place.formatted_address, place.geometry.location.lat(), place.geometry.location.lng());
-            infowindow.setContent(place.formatted_address);
-            infowindow.open(map, marker);
-    
-          });
-          // this function will work on marker move event into map 
-          markers.forEach((marker, index) => {
-            google.maps.event.addListener(marker, 'dragend', function () {
-              geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                  if (results[0]) {
-                    bindDataToForm(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
-                    infowindow.setContent(results[0].formatted_address);
-                    infowindow.open(map, marker);
-                  }
-                }
-              });
-            });
-            google.maps.event.addListener(marker, "click", function() {
-              geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                  if (results[0]) {
-                    bindDataToForm(results[0].formatted_address, marker.getPosition().lat(), marker.getPosition().lng());
-                    infowindow.setContent(results[0].formatted_address);
-                    infowindow.open(map, marker);
-                  }
-                }
-              });
-    
-            })
-          })
-    
-        }
-        function bindDataToForm(address, lat, lng) {
-          console.log(address, lat, lng)
-        }
-        google.maps.event.addDomListener(window, 'load', initialize);
-      </script>
+    }
+    function bindDataToForm(address, lat, lng) {
+      console.log(address, lat, lng)
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
 </body>
 
 </html>
