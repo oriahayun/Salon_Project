@@ -112,3 +112,16 @@ input:focus {
 #searchInput:focus {
     border-color: #4d90fe;
 }
+
+.salon_image_box {
+    width: auto;
+    height: 180px;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.salon_image_box img {
+    width: 100%;
+    height: 100%;
+}

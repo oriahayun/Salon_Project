@@ -38,7 +38,7 @@
                         <span class="u-nav">Home</span>
                     </span>
                 </a>
-                <a href="/salon" class="nav-link active">
+                <a href="/salons" class="nav-link active">
                     <span class="nav-link-span">
                       <span class="u-nav">Salons</span>
                     </span>
@@ -61,7 +61,7 @@
             <div class="card">
                 <div class="card-body p-3">
                     <div class="mb-2">
-                        <a href="/salon/new-salon" class="btn btn-primary btn-sm">New Salon</a>
+                        <a href="/salons/new-salon" class="btn btn-primary btn-sm">New Salon</a>
                     </div>
                     <table id="salonData" class="display nowrap" style="width:100%">
                         <thead>
@@ -80,7 +80,10 @@
                                 <td><%= position.location %></td>
                                 <td><%= position.latitude %></td>
                                 <td><%= position.longitude %></td>
-                                <td>61</td>
+                                <td>
+                                    <a href="/salons/edit-salon/<%= position.id %>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="javascript:void(0);" class="btn btn-danger btn-sm salonRemove" data-id="<%= position.id %>">Delete</a>
+                                </td>
                                 
                             </tr>
                             <% }) %>
@@ -105,5 +108,23 @@
         
             new $.fn.dataTable.FixedHeader( table );
         } );
+        $(document).on("click", ".salonRemove", function(e) {
+            let salonId = $(this).data("id");
+            let data = {
+                id: salonId
+            }
+            $.ajax({
+                type: 'post',
+                url: '/salons/salon-delete',
+                data: data,
+                success: function (result) {
+                    console.log(result)
+                    if (result.status == "success") {
+                        location.reload();
+                    }
+
+                }
+            });
+        });
     </script>
 </body>

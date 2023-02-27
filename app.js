@@ -6,6 +6,7 @@ var cors = require('cors');
 var colors = require('colors');
 const { connectDB } = require("./config/db");
 const dotenv = require("dotenv");
+const fileUpload = require('express-fileupload');
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ dotenv.config();
 connectDB();
 
 var app = express();
-
+app.use(fileUpload());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -30,7 +31,7 @@ app.use('/login', require('./routes/auth/login'));
 app.use('/register', require('./routes/auth/register'));
 app.use('/logout', require('./routes/auth/logout'));
 app.use('/dashboard', require('./routes/dashboard'));
-app.use('/salon', require('./routes/salon'));
+app.use('/salons', require('./routes/salon'));
 app.use('/news', require('./routes/news'));
 
 module.exports = app;

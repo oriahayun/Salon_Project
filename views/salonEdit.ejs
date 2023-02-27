@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Salon | New Salon</title>
+    <title>Salon | Edit Salon</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -37,9 +37,9 @@
                 </a>
                 <a href="/salons" class="nav-link active">
                     <span class="nav-link-span">
-                        <span class="u-nav">Salons</span>
+                      <span class="u-nav">Salons</span>
                     </span>
-                </a>
+                  </a>
                 <a href="/appointment" class="nav-link">
                     <span class="nav-link-span">
                         <span class="u-nav">Appointment</span>
@@ -60,26 +60,20 @@
                     <h4>New Salon</h4>
                 </div>
                 <div class="card-body p-3">
-                    <form class="needs-validation" action="/salons/new-salon" method="POST" enctype="multipart/form-data" novalidate>
-                        <div id="MsgShow">
-                        <% if (status=="success" ) { %>
-                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                            <strong>
-                                <%= message %>
-                            </strong>
-                        </div>
-                        <% } else if (status=="error" ) { %>
+                    <form class="needs-validation" action="/salons/edit-salon/<%= position.id %>" method="POST" novalidate>
+                        <% if (status == "success") { %>
+                            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                <strong><%= message %></strong>
+                            </div>
+                        <% } else if (status == "error") { %>
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>
-                                    <%= message %>
-                                </strong>
+                                <strong><%= message %></strong>
                             </div>
                         <% } %>
-                        </div>
                         <div class="d-flex justify-content-start align-items-center mb-3">
                             <div class="salon_image_box" id="salon_upload">
                                 <input type="file" id="file_input" name="salon_file" accept=".png, .jpg, .jpeg" hidden>
-                                <img src="/img/salon-img.png" alt="Salon Image" id="img">
+                                <img src="/salon/<%= position.screen %>" alt="Salon Image" id="img">
                             </div>
                             <div class="d-flex flex-column align-items ml-4">
                                 <div class="d-flex justify-content-start mb-4">
@@ -94,8 +88,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Salon Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                        placeholder="Salon Name" required />
+                                    <input type="text" class="form-control" name="name" placeholder="Salon Name" value="<%= position.name %>" required />
                                     <div class="invalid-feedback">
                                         Salon Name is required.
                                     </div>
@@ -104,10 +97,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Location</label>
-                                    <input type="text" class="form-control places-autocomplete"
-                                        id="format_address" name="location" required />
-                                    <input type="hidden" id="latitude" name="latitude">
-                                    <input type="hidden" id="longitude" name="longitude">
+                                    <input type="text" class="form-control places-autocomplete" id="format_address" name="location" value="<%= position.location %>" required />
+                                    <input type="hidden" id="latitude" name="latitude" value="<%= position.latitude %>">
+                                    <input type="hidden" id="longitude" name="longitude" value="<%= position.longitude %>">
                                     <div class="invalid-feedback">
                                         Location is required.
                                     </div>
@@ -118,8 +110,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label">Description</label>
-                                    <textarea type="text" class="form-control" rows="5" name="description"
-                                        required></textarea>
+                                    <textarea type="text" class="form-control" rows="5" name="description" required><%= position.description %></textarea>
                                     <div class="invalid-feedback">
                                         Description is required.
                                     </div>
@@ -133,16 +124,15 @@
                             </div>
                         </div>
                     </form>
-
+                    
                 </div>
             </div>
         </div>
-
-
+        
+        
     </main>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
     <script src='/js/validation.js'></script>
     <script src="/js/autocomplete.js"></script>
     <script>
@@ -151,10 +141,6 @@
         uploadPart.addEventListener("click", function () {
             hiddenPart.click();
         });
-
-        setTimeout(() => {
-            $("#MsgShow").hide();
-        }, "3000")
 
         uploadPart.addEventListener("change", function (e) {
             let img = document.getElementById("img");
