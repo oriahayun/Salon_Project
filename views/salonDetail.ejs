@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salon | Detail Salon</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body>
+    <header id="nav-wrapper">
+        <nav id="nav">
+            <div class="nav left">
+                <span class="gradient skew">
+                    <h1 class="logo un-skew">
+                        <a href="/dashboard">
+                            BeautySN
+                        </a>
+                    </h1>
+                </span>
+                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+                <a href="/dashboard" class="nav-link">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Home</span>
+                    </span>
+                </a>
+                <a href="/appointment-history" class="nav-link active">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Appointment History</span>
+                    </span>
+                </a>
+                <a href="/logout" class="nav-link">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Logout</span>
+                    </span>
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main class="main-container">
+        <div class="container py-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Detail Salon</h4>
+                </div>
+                <div class="card-body p-3">
+                    <div id="MsgShow">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="d-flex justify-content-center align-items-center mb-3">
+                                <img src="/media/<%= position.screen %>" style="border-radius: 8px;max-width: 100%;" alt="Salon Image" >
+                                
+                            </div>                           
+                        </div>
+                        <div class="col-md-8">
+                            <div class="py-2">
+                                <h3><%= position.name %></h3>
+                                <div>
+                                    <span>Location : </span>
+                                    <span><%= position.location %></span>
+                                </div>
+                                <div>
+                                    <span>Latitude : </span>
+                                    <span><%= position.latitude %></span>
+                                </div>
+                                <div>
+                                    <span>Longitude : </span>
+                                    <span><%= position.longitude %></span>
+                                </div>
+                                <div>
+                                    <span>Description : </span>
+                                    <div style="word-wrap: break-word;"><%= position.description %></div>
+                                </div>
+                            </div>
+                            <form class="needs-validation" id="appointmentForm" method="POST" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Start Date</label>
+                                            <input type="datetime-local" id="startDate" class="form-control" name="startDate"
+                                             required />
+                                            <div class="invalid-feedback">
+                                                Start Date is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">End Date</label>
+                                            <input type="datetime-local" id="endDate" class="form-control" name="endDate"
+                                                placeholder="End Date" required />
+                                            <div class="invalid-feedback">
+                                                End Date is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="form-footer py-3">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block btn_appointment">Appointment</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src='/js/validation.js'></script>
+    <script>
+        var positionId = '<%- position._id %>';
+        $(".btn_appointment").on('click', function(e) {
+            var form = document.getElementById("appointmentForm");
+            if (form[0].checkValidity() === false) {
+                e.preventDefault();
+                e.stopPropagation();
+                form.classList.add("was-validated");
+                return;
+            }
+
+            if ($("#startDate").val() > $("#endDate").val()) {
+                alert("End Date has to be bigger than Start Date.");
+                return;
+            }
+
+            let data = {
+                startDate: $("#startDate").val(),
+                endDate: $("#endDate").val(),
+                positionId: positionId
+            }
+
+            $.ajax({
+                type: 'post',
+                url: '/salons/appointment',
+                data: data,
+                success: function (result) {
+                    if (result.status == "success") {
+                        $("#MsgShow").html(
+                            '<div class="alert alert-primary alert-dismissible fade show" role="alert">' +
+                                '<strong>' +
+                                    result.message +
+                                '</strong>' +
+                            '</div>' 
+                        );
+                    } else {
+                        $("#MsgShow").html(
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                                '<strong>' +
+                                    result.message +
+                                '</strong>' +
+                            '</div>' 
+                        );
+                    }
+
+                }
+            });
+        });
+    </script>
+</body>

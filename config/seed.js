@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { User } = require("../models/userModel");
+const { User } = require("../models/User");
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -21,7 +21,7 @@ const seedDB = async () => {
             lastname: "admin",
             email: "admin@admin.com",
             gender: "male",
-            loaction: "",
+            location: "Israel",
             latitude: 0,
             longitude: 0,
             role: "admin",

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salon | Appointment History</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.1/css/fixedHeader.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css">
+</head>
+
+<body>
+    <header id="nav-wrapper">
+        <nav id="nav">
+            <div class="nav left">
+                <span class="gradient skew">
+                    <h1 class="logo un-skew">
+                        <a href="/dashboard">
+                            BeautySN
+                        </a>
+                    </h1>
+                </span>
+                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
+            </div>
+            <div class="nav right">
+                <a href="/dashboard" class="nav-link">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Home</span>
+                    </span>
+                </a>
+                <a href="/appointment-history" class="nav-link active">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Appointment History</span>
+                    </span>
+                </a>
+                <a href="/logout" class="nav-link">
+                    <span class="nav-link-span">
+                        <span class="u-nav">Logout</span>
+                    </span>
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main class="main-container">
+        <div class="container py-5">
+            <div class="card">
+                <div class="card-body p-3">
+                    <table id="appointmentData" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Salon Name</th>
+                                <th>User</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% appointments.forEach(function(appointment) { %>
+                                <tr>
+                                    <td>
+                                        <%= appointment.positionId.name %>
+                                    </td>
+                                    <td>
+                                        <%= appointment.userId.firstname %>
+                                    </td>
+                                    <td>
+                                        <%= moment(appointment.startDate).format('YYYY, MMM DD hh:mm A') %>
+                                    </td>
+                                    <td>
+                                        <%= moment(appointment.endDate).format('YYYY, MMM DD hh:mm A') %>
+                                    </td>
+                                    <td>
+                                        <% if (appointment.status=="approve" ) { %>
+                                            <span class="badge badge-success p-2">Approved</span>
+                                            <% } else if (appointment.status=="decline" ) { %>
+                                                <span class="badge badge-danger p-2">Declined</span>
+                                                <% } else { %>
+                                                    <span class="badge badge-secondary p-2">Pending</span>
+                                                    <% } %>
+
+                                    </td>
+
+                                </tr>
+                                <% }) %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.fixedHeader.min.js"></script>
+    <script src="/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#appointmentData').DataTable({
+                responsive: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table);
+        });
+    </script>
+</body>

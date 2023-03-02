@@ -31,7 +31,11 @@ app.use('/login', require('./routes/auth/login'));
 app.use('/register', require('./routes/auth/register'));
 app.use('/logout', require('./routes/auth/logout'));
 app.use('/dashboard', require('./routes/dashboard'));
+app.use('/owner-dashboard', require('./routes/owner-dashboard'));
 app.use('/salons', require('./routes/salon'));
 app.use('/news', require('./routes/news'));
+app.use('/appointments', require('./routes/appointment'));
+app.use('/appointment-history', require('./routes/appointmentHistory'));
+app.use('/users', require('./routes/user'));
 
 module.exports = app;

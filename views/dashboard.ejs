@@ -35,14 +35,9 @@
             <span class="u-nav">Home</span>
           </span>
         </a>
-        <a href="/salons" class="nav-link">
+        <a href="/appointment-history" class="nav-link">
           <span class="nav-link-span">
-            <span class="u-nav">Salons</span>
-          </span>
-        </a>
-        <a href="/appointment" class="nav-link">
-          <span class="nav-link-span">
-            <span class="u-nav">Appointment</span>
+            <span class="u-nav">Appointment History</span>
           </span>
         </a>
         <a href="/logout" class="nav-link">
@@ -54,8 +49,9 @@
     </nav>
   </header>
   <main class="main-container">
+    <input id="searchSalon" class="input-controls" type="text" placeholder="Enter a Category">
     <input id="searchInput" class="input-controls" type="text" placeholder="Enter a location">
-    <div class="map" id="map" style="width: 100%; height: 92vh;"></div>
+    <div class="map" id="map" style="width: 100%; height: 93vh;"></div>
   </main>
 
   <!-- partial -->
@@ -64,12 +60,17 @@
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB4wDAFyAO2VssN5pRBuYMUKtcVhjD_2e8&libraries=places"></script>
   <script>
-    var salon_positions = '<%- JSON.stringify(positions) %>';
-    const salon_position_data = JSON.parse(salon_positions)
-    const positions = [];
+    var salon_positions = `<%- JSON.stringify(positions) %>`;
+    let markers = [];
+    let map;
+    const salon_position_data = JSON.parse(salon_positions);
+    let positions = [];
     salon_position_data.map((data) => {
       positions.push({
-        lat: parseFloat(data.latitude), lng: parseFloat(data.longitude)
+        lat: parseFloat(data.latitude),
+        lng: parseFloat(data.longitude),
+        positionId: data._id,
+        name: data.name
       })
     })
     function getCoordinates() {
@@ -84,17 +85,18 @@
       let curlongitude = position.coords.longitude;
 
       var latlng = new google.maps.LatLng(curlatitude, curlongitude);
-      var map = new google.maps.Map(document.getElementById('map'), {
+      map = new google.maps.Map(document.getElementById('map'), {
         center: latlng,
         zoom: 12
       });
 
-      const markers = positions.map(position => {
+      markers = positions.map(position => {
         const marker = new google.maps.Marker({
           position,
           map,
           draggable: true,
           animation: google.maps.Animation.DROP,
+          positionId: position.positionId
         });
         marker.setMap(map)
 
@@ -109,7 +111,9 @@
       });
       //marker.setMap(map)
       var input = document.getElementById('searchInput');
+      var inputSalon = document.getElementById('searchSalon');
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(inputSalon);
       var geocoder = new google.maps.Geocoder();
       var autocomplete = new google.maps.places.Autocomplete(input);
       autocomplete.bindTo('bounds', map);
@@ -153,6 +157,50 @@
           });
         });
         google.maps.event.addListener(marker, "click", function () {
+          let sPositionId = this.positionId
+          if (sPositionId) {
+            location.href = `/salons/detail-salon/${sPositionId}`;
+          }
+        })
+      })
+
+    }
+    function bindDataToForm(address, lat, lng) {
+      console.log(address, lat, lng)
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+    $("#searchSalon").keyup(function (e) {
+      hideMarkers();
+      if ($("#searchSalon").val() == "") {
+        markers = positions.map(position => {
+          const marker = new google.maps.Marker({
+            position,
+            map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            positionId: position.positionId
+          });
+          marker.setMap(map);
+          return marker;
+        })
+      } else {
+        let tempMarkers = positions.filter((position) => position.name.startsWith($("#searchSalon").val()));
+        markers = tempMarkers.map(position => {
+          const marker = new google.maps.Marker({
+            position,
+            map,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            positionId: position.positionId
+          });
+          marker.setMap(map);
+          return marker
+        })
+      }
+      markers.forEach((marker, index) => {
+        google.maps.event.addListener(marker, 'dragend', function () {
           geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
               if (results[0]) {
@@ -162,15 +210,24 @@
               }
             }
           });
-
+        });
+        google.maps.event.addListener(marker, "click", function () {
+          let sPositionId = this.positionId
+          if (sPositionId) {
+            location.href = `/salons/detail-salon/${sPositionId}`;
+          }
         })
       })
 
+    });
+    function setMapAll(map) {
+      for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
     }
-    function bindDataToForm(address, lat, lng) {
-      console.log(address, lat, lng)
+    function hideMarkers() {
+      setMapAll(null);
     }
-    google.maps.event.addDomListener(window, 'load', initialize);
   </script>
 </body>
 

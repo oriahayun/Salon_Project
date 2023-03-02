@@ -1,3 +1,4 @@
+const { Appointment } = require("../models/Appointment");
 const { Position } = require("../models/Position");
 
 const salonListView = async (req, res) => {
@@ -6,7 +7,7 @@ const salonListView = async (req, res) => {
 }
 
 const salonNewView = async (req, res) => {
-    res.render('salonNew', { status: "" });
+    res.render('salonNew', { status: "", message: "" });
 }
 
 const salonEditView = async (req, res) => {
@@ -25,7 +26,7 @@ const salonNewCreate = async (req, res) => {
     try {
         const { salon_file } = req.files;
         let screenName = Date.now() + salon_file.name;
-        salon_file.mv('./public/salon/' + screenName);
+        salon_file.mv('./public/media/' + screenName);
         const positionExist = await Position.findOne({ name: name });
         if (positionExist) {
             res.render("salonNew", {
@@ -69,7 +70,7 @@ const salonUpdate = async (req, res) => {
             const { salon_file } = req.files;
             if (salon_file) {
                 let screenName = Date.now() + salon_file.name;
-                salon_file.mv('./public/salon/' + screenName);
+                salon_file.mv('./public/media/' + screenName);
                 positionExist.screen = screenName;
             }
         } catch (error) {
@@ -100,10 +101,44 @@ const salonNewDelete = async (req, res) => {
         })
     } else {
         res.json({
-            status: 'success'
+            status: 'error'
         })
     }
 
+}
+
+const salonDetailView = async (req, res) => {
+    const { id } = req.params;
+    const position = await Position.findById(id);
+    if (!position) {
+        res.render('salonDetail', { status: "error", message: "The Salon is not existed." });
+    } 
+    res.render('salonDetail', { status: "", message: "", position: position });
+}
+
+const salonAppointment = async (req, res) => {
+    const { startDate, endDate, positionId } = req.body;
+
+    const position = await Position.findById(positionId);
+    if (!position) {
+        res.render('salonDetail', { status: "error", message: "The Salon is not existed." });
+    } 
+    try {
+        let newAppointment = new Appointment({
+            startDate: startDate, 
+            endDate: endDate,
+            positionId: positionId,
+            userId: req.user.id,
+            status: "pending",
+        });
+    
+        await newAppointment.save();
+    
+        res.json({ status: "success", message: "Success!" });
+    } catch (error) {
+        res.json({ status: "error", message: "Error!" });
+    }
+    
 }
 
 module.exports = {
@@ -112,5 +147,7 @@ module.exports = {
     salonNewCreate,
     salonNewDelete,
     salonEditView,
-    salonUpdate
+    salonUpdate,
+    salonDetailView,
+    salonAppointment
 }

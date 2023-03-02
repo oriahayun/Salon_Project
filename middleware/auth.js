@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { User } = require("../models/User.js");
 
 const auth = async (req, res, next) => {
     const token = req.cookies.token
@@ -10,7 +11,7 @@ const auth = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if (decoded) {
-            req.user = decoded
+            req.user = await User.findById(decoded.id).select('-password')
             return next()
         } else {
             return res.send("Not allowed")

@@ -5,6 +5,12 @@ const dashboardView = async (req, res) => {
     res.render('dashboard', { positions: positions });
 }
 
+const ownerDashboardView = async (req, res) => {
+    const positions = await Position.find();
+    res.render('ownerDashboard', { positions: positions });
+}
+
 module.exports = {
-    dashboardView
+    dashboardView,
+    ownerDashboardView
 }

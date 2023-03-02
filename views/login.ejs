@@ -52,19 +52,10 @@
                             <form class="card needs-validation" id="loginForm" method="POST" novalidate>
                                 <div class="card-body p-6">
                                     <div class="card-title text-center">Login to account</div>
-                                    <% if (status=="success" ) { %>
-                                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                                            <strong>
-                                                <%= message %>
-                                            </strong>
-                                        </div>
-                                        <% } else if (status=="error" ) { %>
-                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                <strong>
-                                                    <%= message %>
-                                                </strong>
-                                            </div>
-                                            <% } %>
+                                    <div id="showMsg">
+
+                                    </div>
+                                    
                                                 <div class="form-group">
                                                     <label class="form-label">Email address</label>
                                                     <input type="email" class="form-control" id="email"
@@ -146,7 +137,19 @@
                         document.cookie = `token=${result.userToken}`;
                         if (result.user.role == "client") {
                             location.href = "/dashboard";
+                        } else if (result.user.role == "admin") {
+                            location.href = "/users";
+                        } else if (result.user.role == "salonowner") {
+                            location.href = "/owner-dashboard";
                         }
+                    } else {
+                        $("#showMsg").html(
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                                '<strong>' +
+                                    result.message +
+                                '</strong>' +
+                            '</div>'
+                        )
                     }
 
                 }

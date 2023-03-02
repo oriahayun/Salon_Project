@@ -27,8 +27,9 @@ const loginUser = async (req, res) => {
                 role: userExist.role,
             }
         })
+
     } else {
-        res.render("login", { status: "error", message: "The email or password is not correct" })
+        res.json({ status: "error", message: "The email or password is not correct" })
     }
 }
 

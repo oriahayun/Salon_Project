@@ -22,7 +22,7 @@
             <div class="nav left">
                 <span class="gradient skew">
                     <h1 class="logo un-skew">
-                        <a href="/dashboard">
+                        <a href="/owner-dashboard">
                             BeautySN
                         </a>
                     </h1>
@@ -30,7 +30,7 @@
                 <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
             </div>
             <div class="nav right">
-                <a href="/dashboard" class="nav-link">
+                <a href="/owner-dashboard" class="nav-link">
                     <span class="nav-link-span">
                         <span class="u-nav">Home</span>
                     </span>
@@ -40,9 +40,9 @@
                       <span class="u-nav">Salons</span>
                     </span>
                   </a>
-                <a href="/appointment" class="nav-link">
+                <a href="/appointments" class="nav-link">
                     <span class="nav-link-span">
-                        <span class="u-nav">Appointment</span>
+                        <span class="u-nav">Appointments</span>
                     </span>
                 </a>
                 <a href="/logout" class="nav-link">
@@ -73,7 +73,7 @@
                         <div class="d-flex justify-content-start align-items-center mb-3">
                             <div class="salon_image_box" id="salon_upload">
                                 <input type="file" id="file_input" name="salon_file" accept=".png, .jpg, .jpeg" hidden>
-                                <img src="/salon/<%= position.screen %>" alt="Salon Image" id="img">
+                                <img src="/media/<%= position.screen %>" alt="Salon Image" id="img">
                             </div>
                             <div class="d-flex flex-column align-items ml-4">
                                 <div class="d-flex justify-content-start mb-4">
