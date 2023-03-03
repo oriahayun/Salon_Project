@@ -90,9 +90,9 @@ section {
 }
 
 .nav span.gradient {
-    background: #7c0943;
+    /* background: #7c0943;
     background: -webkit-linear-gradient(45deg, #7c0943, #ff5858);
-    background: linear-gradient(45deg, #7c0943, #ff5858);
+    background: linear-gradient(45deg, #7c0943, #ff5858); */
     padding: 0 1em;
     position: relative;
     right: 1em;
@@ -184,9 +184,6 @@ section {
     .nav a:link.active,
     a:visited.active,
     a:active.active {
-        background: #7c0943;
-        background: -webkit-linear-gradient(45deg, #7c0943, #ff5858);
-        background: linear-gradient(45deg, #7c0943, #ff5858);
         color: #fff;
     }
 
@@ -206,9 +203,9 @@ section {
     }
 
     .nav a:hover.nav-link:not(.active) {
-        color: #444;
-        background: #ddd;
-        background: linear-gradient(45deg, #fff, #ddd);
+        color: rgb(161, 12, 12);
+        /* background: #ddd;
+        background: linear-gradient(45deg, #fff, #ddd); */
     }
 }
 

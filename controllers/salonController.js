@@ -3,7 +3,7 @@ const { Position } = require("../models/Position");
 
 const salonListView = async (req, res) => {
     const positions = await Position.find();
-    res.render('salonList', { positions: positions });
+    res.render('salonList', { positions: positions, pageName: "salons" });
 }
 
 const salonNewView = async (req, res) => {
@@ -16,7 +16,7 @@ const salonEditView = async (req, res) => {
     if (positionExist) {
         res.render('salonEdit', { status: "", position: positionExist });
     } else {
-        res.render('salonEdit', { status: "error", position: {}, message: "not Existed" });
+        res.render('salonEdit', { status: "error", position: {}, message: "not Existed", pageName: "salons" });
     }
     
 }
@@ -30,7 +30,7 @@ const salonNewCreate = async (req, res) => {
         const positionExist = await Position.findOne({ name: name });
         if (positionExist) {
             res.render("salonNew", {
-                status: "error", message: "The Salon already existed!"
+                status: "error", message: "The Salon already existed!", pageName: "salons"
             });
         } else {
             let newPosition = new Position({
@@ -45,12 +45,12 @@ const salonNewCreate = async (req, res) => {
             await newPosition.save();
 
             res.render("salonNew", {
-                status: "success", message: "Success!"
+                status: "success", message: "Success!", pageName: "salons"
             });
         }
     } catch (error) {
         res.render("salonNew", {
-            status: "error", message: "You have to upload image."
+            status: "error", message: "You have to upload image.", pageName: "salons"
         });
     }
     
@@ -80,12 +80,12 @@ const salonUpdate = async (req, res) => {
         await positionExist.save();
 
         res.render("salonEdit", {
-            status: "success", message: "Success Updated!", position: positionExist
+            status: "success", message: "Success Updated!", position: positionExist, pageName: "salons"
         });
     } else {
         
         res.render("salonEdit", {
-            status: "error", message: "The Salon not existed!", position: {}
+            status: "error", message: "The Salon not existed!", position: {}, pageName: "salons"
         });
     }
 
@@ -113,7 +113,7 @@ const salonDetailView = async (req, res) => {
     if (!position) {
         res.render('salonDetail', { status: "error", message: "The Salon is not existed." });
     } 
-    res.render('salonDetail', { status: "", message: "", position: position });
+    res.render('salonDetail', { status: "", message: "", position: position , pageName: "salons"});
 }
 
 const salonAppointment = async (req, res) => {

@@ -16,7 +16,8 @@ const newsView = async (req, res) => {
     })
     res.render('news', {
         userData: userData,
-        newsData: news
+        newsData: news,
+        pageName: "news"
     })
 }
 

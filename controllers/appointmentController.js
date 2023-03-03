@@ -3,12 +3,12 @@ var moment = require('moment');
 
 const appointmentListView = async (req, res) => {
     const appointments = await Appointment.find().populate("positionId", ['name']).populate("userId", ["firstname", "lastname"]);
-    res.render('appointmentList', { appointments: appointments, moment: moment });
+    res.render('appointmentList', { appointments: appointments, moment: moment, pageName: "appointments" });
 }
 
 const appointmentHistoryListView = async (req, res) => {
     const appointments = await Appointment.find({ userId: req.user.id }).populate("positionId", ['name']).populate("userId", ["firstname", "lastname"]);
-    res.render('appointHistory', { appointments: appointments, moment: moment });
+    res.render('appointHistory', { appointments: appointments, moment: moment, pageName: "appointments" });
 }
 
 const appointmentApprove = async (req, res) => {

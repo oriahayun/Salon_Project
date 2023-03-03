@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Salon | Dashboard</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css"
+        integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body>
+    <div>
+        <%- include("./partials/adminHeader"); %>
+    </div>
+    <main class="main-container">
+        <div class="container">
+            <div class="p-4 row" style="margin-top: 50px; width: 100%;">
+                <div class="col-md-6" style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="font-size: 20px; font-weight: bold;">Appointments per month</div>
+                    <div id="appointmentChart">
+                    </div>
+                </div>
+                <div class="col-md-6" style="display: flex; flex-direction: column; align-items: center;">
+                    <div style="font-size: 20px; font-weight: bold;">Clients per day</div>
+                    <div id="clientChart">
+                    </div>
+                </div>
+            </div>
+            <div class="row text-dark w-main" style="max-width: 700px;
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;">
+                <div class="col-sm-12">
+                    <h4 class="title ">
+                        <span>
+                            Weather for
+                        </span>
+                        <a id="current-location"> </a>
+                    </h4>
+                    <div id="desc-box" style="padding-top: 20px;">
+                        <div class="day-text">Today</div>
+                        <p id="temp-h-l" class="text-capitalize"></p>
+                        <hr class="hr-title hr-title-primary">
+                        <p id="wind-cond-w" class="text-capitalize"></p>
+                        <hr class="hr-title hr-title-primary">
+                        <p id="description" class="text-capitalize"></p>
+                        <hr class="hr-title hr-title-primary">
+                        <p class="humidity"><span id="humidity"></span> <i class="wi wi-humidity"></i> Humidity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.3.0/billboard.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.3.0/billboard.min.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript"
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js"></script>
+    <script>
+        const clients = '<%- JSON.stringify(clients) %>';
+        const appointments = '<%- JSON.stringify(appointment) %>';
+        const weather = '<%- JSON.stringify(weatherData) %>';
+        const currentLocation = '<%- currentLocation %>';
+        const clientData = JSON.parse(clients);
+        const appointmentData = JSON.parse(appointments);
+        const weatherData = JSON.parse(weather);
+        console.log(weatherData.main, currentLocation)
+        var temp_new_max = Math.round(weatherData.main.temp_max);
+        var temp_new_min = Math.round(weatherData.main.temp_min);
+        $(document).ready(function () {
+            $("#current-location").text(currentLocation);
+            $("#temp-h-l").html('High <span class="-max-temp">' + temp_new_max + '°' + ' </span>| ' + 'Low <span class="-min-temp">' + temp_new_min + '°' + '</span>');
+            $("#wind-cond-w").html('<span>Wind: ' + Math.round(weatherData.wind.speed) + "mph" + '</span>');
+            $("#description").text(weatherData.weather[0].description);
+            if (weatherData.main.humidity) {
+                $("#humidity").text(weatherData.main.humidity);
+            } else {
+                $("#humidity").text("0");
+            }
+            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = 460 - margin.left - margin.right,
+                height = 400 - margin.top - margin.bottom;
+
+            var appointment_vis = d3.select("#appointmentChart").append("svg")
+                .data(appointmentData)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var client_vis = d3.select("#clientChart").append("svg")
+                .data(clientData)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var appointment_x = d3.scaleBand()
+                .range([0, width])
+                .domain(appointmentData.map(function (d) { return d._id; }))
+                .padding(0.2);
+            appointment_vis.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(appointment_x))
+                .selectAll("text")
+                .style("text-anchor", "center");
+
+            var client_x = d3.scaleBand()
+                .range([0, width])
+                .domain(clientData.map(function (d) { return d._id; }))
+                .padding(0.2);
+            client_vis.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(client_x))
+                .selectAll("text")
+                .style("text-anchor", "center");
+
+            var appointment_y = d3.scaleLinear()
+                .domain([0, appointmentData.sort((a, b) => b.count - a.count)[0].count])
+                .range([height, 0]);
+            appointment_vis.append("g")
+                .call(d3.axisLeft(appointment_y));
+
+            // Bars
+            appointment_vis.selectAll("mybar")
+                .data(appointmentData)
+                .enter()
+                .append("rect")
+                .attr("x", function (d) { return appointment_x(d._id); })
+                .attr("y", function (d) { return appointment_y(d.count); })
+                .attr("width", appointment_x.bandwidth())
+                .attr("height", function (d) { return height - appointment_y(d.count); })
+                .attr("fill", "#085587")
+
+            var client_y = d3.scaleLinear()
+                .domain([0, clientData.sort((a, b) => b.count - a.count)[0].count])
+                .range([height, 0]);
+            client_vis.append("g")
+                .call(d3.axisLeft(client_y));
+
+            // Bars
+            client_vis.selectAll("mybar")
+                .data(clientData)
+                .enter()
+                .append("rect")
+                .attr("x", function (d) { return client_x(d._id); })
+                .attr("y", function (d) { return client_y(d.count); })
+                .attr("width", client_x.bandwidth())
+                .attr("height", function (d) { return height - client_y(d.count); })
+                .attr("fill", "#085587")
+        });
+    </script>
+</body>
+
+</html>

@@ -20,32 +20,7 @@
 </head>
 
 <body>
-    <header id="nav-wrapper">
-        <nav id="nav">
-            <div class="nav left">
-                <span class="gradient skew">
-                    <h1 class="logo un-skew">
-                        <a href="/users">
-                            BeautySN
-                        </a>
-                    </h1>
-                </span>
-                <button id="menu" class="btn-nav"><span class="fas fa-bars"></span></button>
-            </div>
-            <div class="nav right">
-                <a href="/users" class="nav-link active">
-                    <span class="nav-link-span">
-                        <span class="u-nav">Users</span>
-                    </span>
-                </a>
-                <a href="/logout" class="nav-link">
-                    <span class="nav-link-span">
-                        <span class="u-nav">Logout</span>
-                    </span>
-                </a>
-            </div>
-        </nav>
-    </header>
+    <%- include('./partials/adminHeader'); %>
     <main class="main-container">
         <div class="container py-5">
             <div class="card">

@@ -74,10 +74,14 @@
                             <% appointments.forEach(function(appointment) { %>
                                 <tr>
                                     <td>
-                                        <%= appointment.positionId.name %>
+                                        <% if(appointment.positionId) { %>
+                                            <%= appointment.positionId.name %>
+                                        <% } %>
                                     </td>
                                     <td>
-                                        <%= appointment.userId.firstname %>
+                                        <% if(appointment.userId) { %>
+                                            <%= appointment.userId.firstname %>
+                                        <% } %>
                                     </td>
                                     <td>
                                         <%= moment(appointment.startDate).format('YYYY, MMM DD hh:mm A') %>
