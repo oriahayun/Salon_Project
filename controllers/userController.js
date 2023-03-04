@@ -69,10 +69,27 @@ const userUpdate = async (req, res) => {
 
 }
 
+const userDelete = async (req, res) => {
+    const { id } = req.body;
+    const user = await User.findById(id);
+    if (user) {
+        await User.deleteOne({ _id: id });
+        res.json({
+            status: 'success'
+        })
+    } else {
+        res.json({
+            status: 'error'
+        })
+    }
+
+}
+
 module.exports = {
     userListView,
     userNewView,
     userNewCreate,
     userUpdate,
-    userEditView
+    userEditView,
+    userDelete
 }

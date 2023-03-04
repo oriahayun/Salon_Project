@@ -75,7 +75,7 @@
         const clientData = JSON.parse(clients);
         const appointmentData = JSON.parse(appointments);
         const weatherData = JSON.parse(weather);
-        console.log(weatherData.main, currentLocation)
+
         var temp_new_max = Math.round(weatherData.main.temp_max);
         var temp_new_min = Math.round(weatherData.main.temp_min);
         $(document).ready(function () {
@@ -125,9 +125,12 @@
                 .call(d3.axisBottom(client_x))
                 .selectAll("text")
                 .style("text-anchor", "center");
-
+            var appL = 0;
+            if (appointmentData.length) {
+                appL = appointmentData.sort((a, b) => b.count - a.count)[0].count
+            }
             var appointment_y = d3.scaleLinear()
-                .domain([0, appointmentData.sort((a, b) => b.count - a.count)[0].count])
+                .domain([0, appL])
                 .range([height, 0]);
             appointment_vis.append("g")
                 .call(d3.axisLeft(appointment_y));
@@ -142,9 +145,12 @@
                 .attr("width", appointment_x.bandwidth())
                 .attr("height", function (d) { return height - appointment_y(d.count); })
                 .attr("fill", "#085587")
-
+            var clientL = 0;
+            if (clientData.length) {
+                clientL = clientData.sort((a, b) => b.count - a.count)[0].count
+            }
             var client_y = d3.scaleLinear()
-                .domain([0, clientData.sort((a, b) => b.count - a.count)[0].count])
+                .domain([0, clientL])
                 .range([height, 0]);
             client_vis.append("g")
                 .call(d3.axisLeft(client_y));

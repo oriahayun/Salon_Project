@@ -38,4 +38,11 @@ app.use('/appointments', require('./routes/appointment'));
 app.use('/appointment-history', require('./routes/appointmentHistory'));
 app.use('/users', require('./routes/user'));
 
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+
+app.listen(
+    PORT,
+    console.log(
+        colors.yellow.bold(`Server running on port http://localhost:${PORT}`)
+    )
+)

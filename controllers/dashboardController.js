@@ -14,11 +14,8 @@ const ownerDashboardView = async (req, res) => {
 }
 
 const adminDashboardView = async (req, res) => {
-    var apiIP = 'https://ipinfo.io';
-    const currentIPInformation = (await axios.get(apiIP)).data
-    let location = currentIPInformation.city + ", " + currentIPInformation.country;
     const weatherAPI = "https://api.openweathermap.org/data/2.5/weather";
-    const weatherData = (await axios.get(weatherAPI, { params: { q: location, units: 'metric', appid: "bc1301b0b23fe6ef52032a7e5bb70820" } })).data
+    const weatherData = (await axios.get(weatherAPI, { params: { q: "Rishon Lezion, IL", units: 'metric', appid: "bc1301b0b23fe6ef52032a7e5bb70820" } })).data
 
     const appointmentData = await Appointment.aggregate([
         {
@@ -47,7 +44,7 @@ const adminDashboardView = async (req, res) => {
     ]);
     const aData = appointmentData;
     const cData = clientData;
-    res.render('adminDashboard', { appointment: aData, clients: cData, pageName: "admin-dashboard", weatherData: weatherData, currentLocation: location });
+    res.render('adminDashboard', { appointment: aData, clients: cData, pageName: "admin-dashboard", weatherData: weatherData, currentLocation: "Rishon Lezion, IL" });
 }
 
 module.exports = {
