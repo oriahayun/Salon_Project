@@ -9,10 +9,10 @@ const newsView = async (req, res) => {
     });
 
     const news = await client.get('statuses/user_timeline', {
-        screen_name: "mnt"
+        screen_name: "NewBeauty"
     });
     const userData = await client.get('users/show.json', {
-        screen_name: "mnt"
+        screen_name: "NewBeauty"
     })
     res.render('news', {
         userData: userData,
