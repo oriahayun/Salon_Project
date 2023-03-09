@@ -59,13 +59,14 @@ const salonNewCreate = async (req, res) => {
 
 const salonUpdate = async (req, res) => {
     const { id } = req.params;
-    const { name, location, latitude, longitude } = req.body;
+    const { name, location, latitude, longitude, description } = req.body;
     const positionExist = await Position.findById(id);
     if (positionExist) {
         positionExist.name = name;
         positionExist.location = location;
         positionExist.latitude = latitude;
         positionExist.longitude = longitude;
+        positionExist.description = description;
         try {
             const { salon_file } = req.files;
             if (salon_file) {

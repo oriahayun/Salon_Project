@@ -63,7 +63,7 @@
     var salon_positions = `<%- JSON.stringify(positions) %>`;
     let markers = [];
     let map;
-    const salon_position_data = JSON.parse(salon_positions);
+    const salon_position_data = JSON.parse(salon_positions.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t"));
     let positions = [];
     salon_position_data.map((data) => {
       positions.push({
